@@ -1,0 +1,27 @@
+ FilteredList<AllPartsDTO> filteredListdata=new FilteredList<>(allparts, e->true);
+        txtsearch.setOnKeyReleased(e->{
+            txtsearch.textProperty().addListener(((observable, oldValue, newValue) ->{
+                filteredListdata.setPredicate((Predicate<? super AllPartsDTO>) part->{
+                    if(newValue==null||newValue.isEmpty()){
+                        return true;
+                    }
+                    String lowercasefilter=newValue.toLowerCase();
+                    if(part.getModelNo().contains(newValue)){
+
+                        return true;
+                    }else if(part.getModelNo().toLowerCase().contains(lowercasefilter)){
+
+                        return true;
+                    }
+                    else if(part.getDescription().toLowerCase().contains(lowercasefilter)){
+
+                        return true;
+                    }
+                    return false;
+                });
+            } ));
+            SortedList<AllPartsDTO> sortedList=new SortedList<>(filteredListdata);
+            sortedList.comparatorProperty().bind(tblallpart.comparatorProperty());
+            tblallpart.setItems(sortedList);
+        });
+
